@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Truns_new</title>
+	<script type="text/javascript" src="scripts/jquery-1.8.0.min.js"></script>
+<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	#cntr{
+		height: 400px;
+		width: 640px;
+		overflow: hidden;
+		position: relative;
+	}
+	#cntr #imgList{
+		width: 3200px;
+		height: 400px;
+		position: relative;
+		left:0;
+		transition:all 0.3s ease;
+	}
+	#cntr li{
+		list-style: none;
+		display: block;
+		float: left;
+		height: 400px;
+		width: 640px;
+	}
+	#ctrlBar{
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+		z-index: 9;
+		height: 24px;
+	}
+	#ctrlBar li{
+		display: block;
+		float: left;
+		height: 20px;
+		width: 20px;
+		border:#666 1px solid;
+		text-align: center;
+		margin:0 5px;
+		cursor: pointer;
+	}
+	#ctrlBar li:hover,.selected{
+		background: #ccc;
+		color: #fff;
+	}
+</style>
+</head>
+<body>
+	<div id='cntr'>
+		<ul id="imgList">
+			<li><a href="#"><img src="01.jpg" alt=""></a></li>
+			<li><a href="#"><img src="02.jpg" alt=""></a></li>
+			<li><a href="#"><img src="03.jpg" alt=""></a></li>
+			<li><a href="#"><img src="04.jpg" alt=""></a></li>
+			<li><a href="#"><img src="05.jpg" alt=""></a></li>
+		</ul>
+		<ul id="ctrlBar">
+
+		</ul>
+	</div>
+</body>
+<script type="text/javascript" >
+	
+	function Pictrans(imgCount,time)
+	{
+		var me = this;		
+		this.time = time;
+		this.imgList = imgList;	
+		this.imgCount = imgCount;
+
+		this.initial = function(){
+			$('#ctrlBar').append('<li class="ctrlBtn selected">1</li>');			
+			for(i = 2; i < (imgCount + 1); i++)
+			{
+				$('#ctrlBar').append('<li class="ctrlBtn">' + i + '</li>');
+			}
+		}
+
+		this.start = function(){
+			interval = setInterval(function()
+			{
+				left = parseInt($('#imgList').css('left'));		
+				i = -left/640 + 1;	
+				btns = $('.ctrlBtn');	
+
+				if(left == -640*4)
+				{
+					$('#imgList').css({'left':0})					
+				}
+				else
+				{
+					distence = -i * 640 +'px';
+					$('#imgList').animate({
+						left: distence},'fast')
+				}
+
+				index =  (i+5) % 5;
+				btns.removeClass('selected');
+				btns.eq(index).addClass('selected');
+			},time);			
+		}
+		this.ctrlBtnStart = function()
+		{
+			$('.ctrlBtn').each(function(i)
+			{
+				$('.ctrlBtn').bind('click',function(){
+					var index = this.innerHTML;
+					var left = (index-1) * -640 + 'px';
+					$('#imgList').css({'left':left});
+
+					clearInterval(interval);
+
+					for(k = 0; k < btns.length; k++)
+					{
+						btns[k].className = 'ctrlBtn';
+					}
+					
+					btns[index-1].className += ' selected';	
+					me.start();
+				})				
+			});
+		}		
+	}
+	var pictrans = new Pictrans(5,1000);
+	pictrans.initial();
+	pictrans.start();
+	pictrans.ctrlBtnStart();
+</script>
+</html>

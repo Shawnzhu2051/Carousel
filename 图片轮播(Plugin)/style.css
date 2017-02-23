@@ -1,0 +1,46 @@
+#cntr{
+	height: 400px;
+	width: 640px;
+	background: #000;
+	position: absolute;
+	overflow: hidden;
+	left:300px;
+	top:100px;
+}
+#imgList{
+	width: 3200px;
+	height: 400px;
+	position: relative;
+	left:0;
+	margin-top: 0px;
+	padding-left: 0px;
+	transition:all 0.3s ease;
+}
+#cntr li{
+	list-style: none;
+	display: block;
+	float: left;
+	height: 400px;
+	width: 640px;
+}
+#ctrlBar{
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	z-index: 9;
+	height: 24px;
+}
+#ctrlBar li{
+	display: block;
+	float: left;
+	height: 20px;
+	width: 20px;
+	border:#666 1px solid;
+	text-align: center;
+	margin:0 5px;
+	cursor: pointer;
+}
+#ctrlBar li:hover,.selected{
+	background: #ccc;
+	color: #fff;
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+	}
+
+	#cntr{
+		height: 300px;
+		width: 400px;
+		overflow: hidden;
+		position: relative;
+	}
+	#cntr #imgList{
+		width: 2000px;
+		height: 300px;
+		position: relative;
+		left:0;
+		transition:all 0.3s ease;
+	}
+	#cntr li{
+		list-style: none;
+		display: block;
+		float: left;
+		height: 300px;
+		width: 400px;
+	}
+	#cntr img{
+		height: 100%;
+		width: 100%;
+	}
+	#ctrlBar{
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+		z-index: 9;
+		height: 24px;
+	}
+	#ctrlBar li{
+		display: block;
+		float: left;
+		height: 20px;
+		width: 20px;
+		background: #fff;
+		border:#666 1px solid;
+		text-align: center;
+		margin:0 5px;
+		cursor: pointer;
+	}
+	#ctrlBar li:hover,.selected{
+		background: #ccc;
+		color: #fff;
+	}
+	</style>
+</head>
+<body>
+	<div id="cntr">
+		<ul id="imgList">
+			<li><a href="#"><img src="images/01.jpg" alt=""></a></li>
+			<li><a href="#"><img src="images/02.jpg" alt=""></a></li>
+			<li><a href="#"><img src="images/03.jpg" alt=""></a></li>
+			<li><a href="#"><img src="images/04.jpg" alt=""></a></li>
+			<li><a href="#"><img src="images/05.jpg" alt=""></a></li>
+		</ul>
+		<ul id="ctrlBar">
+		</ul>
+	</div>
+</body>
+<script type="text/javascript">
+/**
+ * 对JavaScript中图片轮转方法实现封装
+ */
+	function PicTrans(time,imgList,ctrlBtn)
+	{
+		this.time = time;                   //time factor
+		this.imgList = imgList;				//image list name
+		this.ctrlBtn = ctrlBtn;				//control button name
+		var me = this;
+		var interval;
+		var ul = document.getElementById(imgList);
+		var btns = document.getElementsByClassName(ctrlBtn);
+		var imgCount = ul.getElementsByTagName('li').length;
+		var flag = new RegExp(" selected");
+		
+		this.initial = function(){
+			var htmlStr = '';
+			for(i = 0; i < imgCount; i++)
+			{	
+				htmlStr += '<li class="ctrlBtn selected">'+(i+1)+'</li>';
+			}
+			document.getElementById('ctrlBar').innerHTML = htmlStr;
+		}
+		
+		
+		this.start = function(){
+			interval = setInterval(function()
+			{
+				var left = parseInt(ul.style.left)||0;
+				var index;
+				if(left == -400*(imgCount-1))
+				{
+					ul.style.left='0px'
+				}
+				else
+				{
+					ul.style.left = left-400+'px';
+				}
+				left = parseInt(ul.style.left)
+				index = 0 - (left/ 400);
+				for(i = 0; i < btns.length; i++)
+				{
+					btns[i].className = 'ctrlBtn';
+				}
+				btns[index].className += ' selected';
+			},time);	
+		}
+
+	this.ctrlBtnStart = function()
+		{
+			for(i = 0; i < btns.length; i++)
+			{
+				btns[i].addEventListener('click',function()
+				{
+					var index = this.innerHTML;
+					ul.style.left = (index) * -400 + 'px';
+					clearInterval(interval)
+					me.start()
+				});
+			}
+		}
+	}
+
+	var pictrnas = new PicTrans(1000,'imgList','ctrlBtn');
+	pictrnas.initial();
+	pictrnas.start();
+	pictrnas.ctrlBtnStart();
+
+
+
+	var body = document.getElementsByTagName('body')[0];
+
+	body.addEventListener('mousedown',function(e1){
+		body.addEventListener('mousemove',onMousemove);
+	});
+	body.addEventListener('mouseup',function(e3){
+		body.removeEventListener('mousemove',onMousemove);
+		console.log(111)
+	})
+
+	function onMousemove(e2){
+		console.log(e2)
+	}
+
+</script>
+</html>
